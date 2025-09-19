@@ -12,7 +12,7 @@ stages:
       - job: testJob
         displayName: "Run Terraform in Self-Hosted Agent"
         steps:
-          - task: Checkout@2
+          - checkout: self
             displayName: "Checkout repository"
           - task: TerraformTask@5
             inputs:
