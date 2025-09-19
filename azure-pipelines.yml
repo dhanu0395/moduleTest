@@ -1,0 +1,33 @@
+trigger: none
+
+pool:
+  name: "SelfHostedPool"
+
+variables:
+  TF_WORKING_DIR: 'environment/dev'
+
+stages:
+  - stage: test
+    jobs:
+      - job: testJob
+        displayName: "Run Terraform in Self-Hosted Agent"
+        steps:
+          - task: Checkout@2
+            displayName: "Checkout repository"
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'init'
+              workingDirectory: '$(TF_WORKING_DIR)'
+              backendServiceArm: 'DjAzureSPNConnection'
+              backendAzureRmStorageAccountName: 'dhanustorage03'
+              backendAzureRmContainerName: 'dhanucontainer'
+              backendAzureRmKey: 'testgit123'
+          - task: TerraformTask@5
+            inputs:
+              provider: 'azurerm'
+              command: 'plan'
+              workingDirectory: '$(TF_WORKING_DIR)'
+              environmentServiceNameAzureRM: 'DjAzureSPNConnection'
+          
+          
